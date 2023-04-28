@@ -198,7 +198,7 @@ public final class CoreGraphicsContext: GraphicsContext {
         guard let dataPointer = dataPointer else {
             throw GraphicsContextError.noRawBuffer
         }
-        try body(dataPointer, width * format.bytesPerPixel)
+        try body(dataPointer, cgContext.bytesPerRow)
     }
 }
 

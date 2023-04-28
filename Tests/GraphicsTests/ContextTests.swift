@@ -6,7 +6,8 @@ final class ContextTests: XCTestCase {
     func testSimpleDrawRect() throws {
         let ctx = try PlatformGraphicsContext(width: 8, height: 8, format: .g8)
         ctx.draw(rect: Rectangle(fromX: 0, y: 4, width: 8, height: 4, color: .white, isFilled: true))
-        try ctx.withUnsafeMutableBytes { buffer in
+        try ctx.withUnsafeMutableBytes { buffer, stride in
+            XCTAssert(stride >= 8)
             // first half should be black, second half should be white
             for idx in 0..<32 {
                 XCTAssertEqual(buffer[idx], 0, "Expected black pixel")
@@ -27,7 +28,8 @@ final class ContextTests: XCTestCase {
         // but I'm open to better implementations here.
         for _ in 0..<10 {
             let ctx = try PlatformGraphicsContext(width: 100, height: 100, format: .g8)
-            try ctx.withUnsafeMutableBytes { buffer in
+            try ctx.withUnsafeMutableBytes { buffer, stride in
+                XCTAssert(stride >= 100)
                 // a new buffer should be all black
                 for idx in 0..<10000 {
                     XCTAssertEqual(buffer[idx], 0, "Expected black pixel")
